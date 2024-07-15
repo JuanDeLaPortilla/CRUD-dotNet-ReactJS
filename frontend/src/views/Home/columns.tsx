@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "../../components/ui/dropdown-menu"
 import {FiChevronDown, FiChevronUp, FiEdit, FiMoreHorizontal, FiTrash2} from "react-icons/fi";
+import {Link} from "react-router-dom";
 
 const productFilterFn: FilterFn<TProduct> = (
   row: Row<TProduct>,
@@ -110,9 +111,17 @@ export const columns: ColumnDef<TProduct>[] = [
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Acciones</DropdownMenuLabel>
               <DropdownMenuSeparator/>
-              <DropdownMenuItem className="flex items-center gap-2">
-                <FiEdit/>
-                Editar
+              <DropdownMenuItem>
+                <Link
+                  to={{
+                    pathname: '/add',
+                    search: `?id=${product.id}`,
+                  }}
+                  className="flex items-center gap-2"
+                >
+                  <FiEdit/>
+                  Editar
+                </Link>
               </DropdownMenuItem>
               <DropdownMenuItem className="flex items-center gap-2 focus:text-red-700">
                 <FiTrash2/>

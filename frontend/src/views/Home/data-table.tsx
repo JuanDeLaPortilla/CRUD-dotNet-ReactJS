@@ -156,7 +156,7 @@ export function DataTable<TData, TValue>
           </TableBody>
         </Table>
 
-        <div className="flex justify-between items-center py-4 mx-2">
+        <div className="flex flex-wrap justify-between items-center py-4 mx-2">
           <div className="text-sm text-slate-400 flex justify-between items-center">
             Mostrando registros del {table.getRowModel().rows.length} al
             <Select onValueChange={(value) => {

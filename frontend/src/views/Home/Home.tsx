@@ -16,8 +16,11 @@ export const Home = () => {
       try {
         const response = await fetch(api_definition('Product/List'))
         const data = await response.json()
+
         if (!data) return
+
         setProducts(data)
+        
       } catch (error) {
         console.log(error)
       }
@@ -34,7 +37,7 @@ export const Home = () => {
           className={cn(
             buttonVariants({variant: "default", size: "sm"}),
             "flex items-center gap-2")}
-          to='/'>
+          to='/add'>
           <FiPlus size={16}/>
           Nuevo Producto
         </Link>
