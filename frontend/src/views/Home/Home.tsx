@@ -3,15 +3,23 @@ import {useEffect, useState} from "react";
 import {TProduct} from "../../types/product.ts";
 import {DataTable} from "./data-table.tsx";
 import {columns} from "./columns.tsx";
-import {Link} from "react-router-dom";
+import {Link, useLocation} from "react-router-dom";
 import {buttonVariants} from "../../components/ui/button"
 import {FiPlus} from "react-icons/fi";
 import {cn} from "../../lib/utils.ts";
+import {toast} from "sonner";
 
 export const Home = () => {
   const [products, setProducts] = useState<TProduct[]>([])
+  const location = useLocation();
+
+  const success = new URLSearchParams(location.search).get('success');
 
   useEffect(() => {
+    if (success) {
+      toast.success("¡Producto eliminado con éxito!", {position: "top-right"});
+    }
+
     const fetchData = async () => {
       try {
         const response = await fetch(api_definition('Product/List'))
@@ -20,14 +28,14 @@ export const Home = () => {
         if (!data) return
 
         setProducts(data)
-        
+
       } catch (error) {
         console.log(error)
       }
     }
 
     fetchData();
-  }, []);
+  }, [success]);
 
   return (
     <section>

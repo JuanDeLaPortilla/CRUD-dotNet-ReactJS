@@ -10,7 +10,17 @@ import {
   DropdownMenuTrigger,
 } from "../../components/ui/dropdown-menu"
 import {FiChevronDown, FiChevronUp, FiEdit, FiMoreHorizontal, FiTrash2} from "react-icons/fi";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
+import {
+  Dialog, DialogClose,
+  DialogContent,
+  DialogDescription, DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger
+} from "../../components/ui/dialog.tsx";
+import {api_definition} from "../../const/api";
+import {toast} from "sonner";
 
 const productFilterFn: FilterFn<TProduct> = (
   row: Row<TProduct>,
@@ -96,39 +106,76 @@ export const columns: ColumnDef<TProduct>[] = [
   },
   {
     id: "actions",
-    cell: ({row}) => {
+    cell: function CellComponent({row}) {
+      const navigate = useNavigate();
       const product = row.original
+
+      const deleteProduct = (id: number) => {
+        const fetchData = async () => {
+          const response = await fetch(api_definition(`Product?id=${id}`), {
+            method: "DELETE"
+          })
+
+          if (response.status === 200 || response.status === 201 || response.status === 204) {
+            navigate("/?success=true")
+          } else {
+            toast.error("Error al eliminar el producto. Por favor, intenta nuevamente.", {position: "top-right"})
+          }
+        }
+
+        fetchData()
+      }
 
       return (
         <div className="flex justify-end">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0 text-slate-600">
-                <span className="sr-only">Abrir menu</span>
-                <FiMoreHorizontal size="16"/>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-              <DropdownMenuSeparator/>
-              <DropdownMenuItem>
-                <Link
-                  to={{
-                    pathname: '/add',
-                    search: `?id=${product.id}`,
-                  }}
-                  className="flex items-center gap-2"
-                >
-                  <FiEdit/>
-                  Editar
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem className="flex items-center gap-2 focus:text-red-700">
-                <FiTrash2/>
-                Eliminar
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <Dialog>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="h-8 w-8 p-0 text-slate-600">
+                  <span className="sr-only">Abrir menu</span>
+                  <FiMoreHorizontal size="16"/>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuLabel>Acciones</DropdownMenuLabel>
+                <DropdownMenuSeparator/>
+                <DropdownMenuItem>
+                  <Link
+                    to={{
+                      pathname: '/add',
+                      search: `?id=${product.id}`,
+                    }}
+                    className="flex items-center gap-2"
+                  >
+                    <FiEdit/>
+                    Editar
+                  </Link>
+                </DropdownMenuItem>
+                <DialogTrigger asChild>
+                  <DropdownMenuItem className="flex items-center gap-2 focus:text-red-700">
+                    <FiTrash2/>
+                    Eliminar
+                  </DropdownMenuItem>
+                </DialogTrigger>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle className="mb-2">Eliminar Producto</DialogTitle>
+                <DialogDescription>
+                  ¿Está seguro de eliminar este producto? Esta acción no se puede revertir.
+                </DialogDescription>
+              </DialogHeader>
+              <DialogFooter>
+                <DialogClose className="flex justify-end items-center gap-2" asChild>
+                  <div>
+                    <Button variant="destructive" onClick={() => deleteProduct(product.id)}>Eliminar</Button>
+                    <Button variant="secondary">Cancelar</Button>
+                  </div>
+                </DialogClose>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </div>
       )
     },

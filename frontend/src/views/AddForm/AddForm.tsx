@@ -74,9 +74,9 @@ export const AddForm = () => {
 
         if (response.status == 200 || response.status == 201 || response.status == 204) {
           if (product != null) {
-            toast.success("Producto editado con éxito", {position: "top-right"});
+            toast.success("¡Producto editado con éxito!", {position: "top-right"});
           } else {
-            toast.success("Producto creado con éxito", {position: "top-right"})
+            toast.success("¡Producto creado con éxito!", {position: "top-right"})
           }
           navigate("/")
         } else {
