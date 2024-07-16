@@ -34,21 +34,20 @@ import {
   Select,
   SelectContent,
   SelectGroup, SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue
 } from "../../components/ui/select.tsx";
+import {FiChevronLeft, FiChevronRight} from "react-icons/fi";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
 }
 
-export function DataTable<TData, TValue>
-({
-   columns,
-   data,
- }: DataTableProps<TData, TValue>) {
+export function DataTable<TData, TValue>({
+                                           columns,
+                                           data,
+                                         }: DataTableProps<TData, TValue>) {
 
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
@@ -67,29 +66,20 @@ export function DataTable<TData, TValue>
     state: {
       sorting,
       columnFilters,
-      columnVisibility
+      columnVisibility,
     }
   })
 
   return (
     <>
-      <div className="flex items-center py-4">
-        <Input
-          placeholder="Buscar productos..."
-          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("name")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
-
+      <div className="flex justify-between items-center py-4 md:w-auto">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
+            <Button variant="outline">
               Columnas
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
+          <DropdownMenuContent align="start">
             {table
               .getAllColumns()
               .filter((column) => column.getCanHide())
@@ -110,6 +100,15 @@ export function DataTable<TData, TValue>
               })}
           </DropdownMenuContent>
         </DropdownMenu>
+
+        <Input
+          placeholder="Buscar productos..."
+          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+          onChange={(event) =>
+            table.getColumn("name")?.setFilterValue(event.target.value)
+          }
+          className="lg:max-w-sm w-60"
+        />
       </div>
 
       <div className="rounded-md border">
@@ -156,18 +155,16 @@ export function DataTable<TData, TValue>
           </TableBody>
         </Table>
 
-        <div className="flex flex-wrap justify-between items-center py-4 mx-2">
-          <div className="text-sm text-slate-400 flex justify-between items-center">
-            Mostrando registros del {table.getRowModel().rows.length} al
+        <div className="flex sm:flex-row flex-col sm:gap-0 gap-4 justify-between items-center py-4 mx-2">
+          <div className="flex items-center">
             <Select onValueChange={(value) => {
               table.setPageSize(+value)
             }}>
-              <SelectTrigger className="w-[60px] m-2">
+              <SelectTrigger className="w-[70px] sm:m-2 mx-2">
                 <SelectValue placeholder="10"/>
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                  <SelectLabel>Registros por página</SelectLabel>
                   <SelectItem value="10">10</SelectItem>
                   <SelectItem value="25">25</SelectItem>
                   <SelectItem value="50">50</SelectItem>
@@ -175,18 +172,20 @@ export function DataTable<TData, TValue>
                 </SelectGroup>
               </SelectContent>
             </Select>
-            de un total de{" "}
-            {table.getRowModel().rows.length} registros
+            <span className="text-sm text-slate-600">registros por página</span>
           </div>
 
           <div className="flex items-center justify-end space-x-2">
+            <span className="text-sm text-slate-600">
+              Página {table.getState().pagination.pageIndex + 1} de {table.getPageCount()}
+            </span>
             <Button
               variant="outline"
               size="sm"
               onClick={() => table.previousPage()}
               disabled={!table.getCanPreviousPage()}
             >
-              Anterior
+              <FiChevronLeft/>
             </Button>
             <Button
               variant="outline"
@@ -194,9 +193,12 @@ export function DataTable<TData, TValue>
               onClick={() => table.nextPage()}
               disabled={!table.getCanNextPage()}
             >
-              Siguiente
+              <FiChevronRight/>
             </Button>
           </div>
+          <span className="text-sm text-slate-600 mx-2">
+            Total de registros: {table.getCoreRowModel().rows.length}
+          </span>
         </div>
       </div>
     </>

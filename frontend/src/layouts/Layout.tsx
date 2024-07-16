@@ -28,8 +28,12 @@ export const Layout = ({children}: ILayoutProps) => {
           <main>
             <div className="pt-6 px-4">
               <div className="w-full min-h-[calc(100vh-230px)]">
-                <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8">
-                  {children}
+                <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 container-fluid flex flex-col">
+                  <div className="row justify-center">
+                    <div className="lg:col-10 md:col-11 col lg:px-8 md:px-1">
+                      {children}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

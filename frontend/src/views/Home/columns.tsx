@@ -139,20 +139,19 @@ export const columns: ColumnDef<TProduct>[] = [
               <DropdownMenuContent align="end">
                 <DropdownMenuLabel>Acciones</DropdownMenuLabel>
                 <DropdownMenuSeparator/>
-                <DropdownMenuItem>
-                  <Link
-                    to={{
-                      pathname: '/add',
-                      search: `?id=${product.id}`,
-                    }}
-                    className="flex items-center gap-2"
-                  >
+                <Link
+                  to={{
+                    pathname: '/add',
+                    search: `?id=${product.id}`,
+                  }}
+                >
+                  <DropdownMenuItem className="flex items-center gap-2 cursor-pointer">
                     <FiEdit/>
                     Editar
-                  </Link>
-                </DropdownMenuItem>
+                  </DropdownMenuItem>
+                </Link>
                 <DialogTrigger asChild>
-                  <DropdownMenuItem className="flex items-center gap-2 focus:text-red-700">
+                  <DropdownMenuItem className="flex items-center gap-2 focus:text-red-700 cursor-pointer">
                     <FiTrash2/>
                     Eliminar
                   </DropdownMenuItem>

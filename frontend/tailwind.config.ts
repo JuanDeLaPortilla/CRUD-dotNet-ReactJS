@@ -6,6 +6,12 @@ const config = {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
+  safelist: [
+    {
+      pattern: /col-/,
+      variants: ['xl', 'lg', 'md', 'sm']
+    }
+  ],
   prefix: "",
   theme: {
     container: {
@@ -32,7 +38,10 @@ const config = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+    require("tailwindcss-animate"),
+    require('tw-bootstrap-grid-optimizer')
+  ],
 } satisfies Config
 
 export default config
