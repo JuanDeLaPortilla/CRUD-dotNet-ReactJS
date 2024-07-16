@@ -39,7 +39,7 @@ export const Layout = ({children}: ILayoutProps) => {
             </div>
           </main>
 
-          <p className="text-center text-sm text-gray-500 mt-20">
+          <p className="text-center text-sm text-gray-500 my-10">
             &copy; 2024-{new Date().getFullYear()}{" "}
             <Link to="https://www.linkedin.com/in/juan-de-la-portilla-cardenas/"
                   className="hover:underline"
